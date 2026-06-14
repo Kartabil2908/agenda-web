@@ -13,7 +13,7 @@ services:
   - type: web
     name: agenda-backend
     runtime: docker
-    repo: https://github.com/laudares26/agenda-web
+    repo: https://github.com/Kartabil2908/agenda-web
     branch: deploy
     autoDeployTrigger: checksPass
     rootDir: backend
@@ -48,7 +48,7 @@ services:
   - type: web
     name: agenda-frontend
     runtime: static
-    repo: https://github.com/laudares26/agenda-web
+    repo: https://github.com/Kartabil2908/agenda-web
     branch: deploy
     autoDeployTrigger: checksPass
     rootDir: frontend
