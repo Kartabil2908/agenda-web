@@ -2,6 +2,11 @@
 
 Sistema de Agenda Web para demonstrar um ciclo completo de desenvolvimento: aplicação full-stack, versionamento, testes, containers, CI/CD e deploy no Render.
 
+## Aplicação em Produção
+
+- Frontend publicado no Render: https://agenda-frontend-efkv.onrender.com
+- Pipeline no GitHub Actions: https://github.com/Kartabil2908/agenda-web/actions
+
 ## Tecnologias
 
 | Camada | Tecnologia |
@@ -60,13 +65,24 @@ npm test -- --coverage --watchAll=false
 
 ## CI/CD e Render
 
-O workflow `.github/workflows/ci-cd.yml` roda na branch `deploy` e executa:
+O workflow `.github/workflows/ci-cd.yml` roda na branch `deploy` e pode ser acompanhado em:
+
+```text
+https://github.com/Kartabil2908/agenda-web/actions
+```
+
+Ele executa:
 
 1. Testes unitários e de integração do backend.
 2. Testes e build do frontend.
 3. Build Docker e testes de aceitação com `docker compose`.
 
 O deploy é feito pelo Render a partir do `render.yaml`. Os serviços usam `autoDeployTrigger: checksPass`, então o Render publica backend e frontend somente depois que os checks do GitHub Actions passam.
+
+No Render, os logs de deploy ficam em:
+
+- `agenda-backend` > Events / Logs
+- `agenda-frontend` > Events / Logs
 
 ## Divisão de Trabalho
 
