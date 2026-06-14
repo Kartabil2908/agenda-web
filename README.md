@@ -93,3 +93,11 @@ No Render, os logs de deploy ficam em:
 ## Apresentação
 
 Abra `apresentacao_completa.html` no navegador para ver a apresentação completa do trabalho.
+
+Prints do Render:
+<img width="1919" height="912" alt="image" src="https://github.com/user-attachments/assets/17c9cb6a-2922-438c-84ac-d5be8c1a8057" />
+<img width="1919" height="921" alt="image" src="https://github.com/user-attachments/assets/053b5f9e-04d6-406f-8592-2aa852f80a59" />
+<img width="1919" height="911" alt="image" src="https://github.com/user-attachments/assets/e6323ddb-48e3-4508-b21c-c928e9cd424a" />
+
+
+
