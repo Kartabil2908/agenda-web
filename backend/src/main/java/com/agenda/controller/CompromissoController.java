@@ -2,12 +2,14 @@ package com.agenda.controller;
 
 import com.agenda.model.Compromisso;
 import com.agenda.repository.CompromissoRepository;
+import com.agenda.repository.ContatoRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/compromissos")
@@ -15,14 +17,21 @@ import java.util.Map;
 public class CompromissoController {
 
     private final CompromissoRepository repository;
+    private final ContatoRepository contatoRepository;
 
-    public CompromissoController(CompromissoRepository repository) {
+    public CompromissoController(CompromissoRepository repository,
+                                 ContatoRepository contatoRepository) {
         this.repository = repository;
+        this.contatoRepository = contatoRepository;
     }
 
     // CREATE - Criar novo compromisso
     @PostMapping
-    public ResponseEntity<Compromisso> criar(@Valid @RequestBody Compromisso compromisso) {
+    public ResponseEntity<?> criar(@Valid @RequestBody Compromisso compromisso) {
+        if (!resolverContato(compromisso)) {
+            return ResponseEntity.notFound().build();
+        }
+
         Compromisso salvo = repository.save(compromisso);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
@@ -47,16 +56,21 @@ public class CompromissoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id,
                                        @Valid @RequestBody Compromisso dados) {
-        return repository.findById(id)
-                .map(comp -> {
-                    comp.setTitulo(dados.getTitulo());
-                    comp.setData(dados.getData());
-                    comp.setHora(dados.getHora());
-                    comp.setDescricao(dados.getDescricao());
-                    comp.setContato(dados.getContato());
-                    return ResponseEntity.ok(repository.save(comp));
-                })
-                .orElse(ResponseEntity.notFound().build());
+        Optional<Compromisso> existente = repository.findById(id);
+        if (existente.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!resolverContato(dados)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Compromisso comp = existente.get();
+        comp.setTitulo(dados.getTitulo());
+        comp.setData(dados.getData());
+        comp.setHora(dados.getHora());
+        comp.setDescricao(dados.getDescricao());
+        comp.setContato(dados.getContato());
+        return ResponseEntity.ok(repository.save(comp));
     }
 
     // DELETE - Remover compromisso
@@ -68,5 +82,21 @@ public class CompromissoController {
                     return ResponseEntity.ok(Map.of("mensagem", "Compromisso removido com sucesso"));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    private boolean resolverContato(Compromisso compromisso) {
+        if (compromisso.getContato() == null) {
+            return true;
+        }
+
+        Long contatoId = compromisso.getContato().getId();
+        if (contatoId == null) {
+            compromisso.setContato(null);
+            return true;
+        }
+
+        Optional<com.agenda.model.Contato> contato = contatoRepository.findById(contatoId);
+        contato.ifPresent(compromisso::setContato);
+        return contato.isPresent();
     }
 }

@@ -15,6 +15,7 @@ services:
     runtime: docker
     repo: https://github.com/laudares26/agenda-web
     branch: deploy
+    autoDeployTrigger: checksPass
     rootDir: backend
     dockerfilePath: ./Dockerfile
     dockerContext: .
@@ -49,6 +50,7 @@ services:
     runtime: static
     repo: https://github.com/laudares26/agenda-web
     branch: deploy
+    autoDeployTrigger: checksPass
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: build

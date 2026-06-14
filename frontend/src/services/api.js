@@ -25,7 +25,7 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' }
 });
 
-// ========== CONTATOS (DEV 1 - Ana) ==========
+// ========== CONTATOS (Alessandra Faria) ==========
 export const contatoService = {
   listar: () => api.get('/contatos'),
   buscar: (id) => api.get(`/contatos/${id}`),
@@ -34,7 +34,7 @@ export const contatoService = {
   deletar: (id) => api.delete(`/contatos/${id}`)
 };
 
-// ========== COMPROMISSOS (DEV 2 - Bruno) ==========
+// ========== COMPROMISSOS (Gabriela Reis) ==========
 export const compromissoService = {
   listar: () => api.get('/compromissos'),
   buscar: (id) => api.get(`/compromissos/${id}`),

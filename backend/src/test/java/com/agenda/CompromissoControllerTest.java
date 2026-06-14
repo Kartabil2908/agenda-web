@@ -4,6 +4,7 @@ import com.agenda.controller.CompromissoController;
 import com.agenda.model.Compromisso;
 import com.agenda.model.Contato;
 import com.agenda.repository.CompromissoRepository;
+import com.agenda.repository.ContatoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * TESTES UNITÁRIOS - Compromissos (DEV 2 - Bruno)
+ * TESTES UNITÁRIOS - Compromissos (Gabriela Reis)
  * Usa @WebMvcTest para testar apenas o controller isoladamente
  */
 @WebMvcTest(CompromissoController.class)
@@ -36,6 +37,9 @@ class CompromissoControllerTest {
 
     @MockBean
     private CompromissoRepository repository;
+
+    @MockBean
+    private ContatoRepository contatoRepository;
 
     private ObjectMapper objectMapper;
 
@@ -60,6 +64,24 @@ class CompromissoControllerTest {
                 .content(objectMapper.writeValueAsString(comp)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.titulo").value("Reunião com cliente"));
+    }
+
+    @Test
+    void deveRetornar404QuandoContatoVinculadoNaoExiste() throws Exception {
+        Contato contato = new Contato();
+        contato.setId(99L);
+
+        Compromisso comp = new Compromisso();
+        comp.setTitulo("Reunião com cliente");
+        comp.setData(LocalDate.of(2024, 12, 15));
+        comp.setContato(contato);
+
+        when(contatoRepository.findById(99L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(post("/api/compromissos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(comp)))
+                .andExpect(status().isNotFound());
     }
 
     @Test

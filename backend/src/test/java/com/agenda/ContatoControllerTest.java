@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * TESTES UNITÁRIOS - Contatos (DEV 1 - Ana)
+ * TESTES UNITÁRIOS - Contatos (Alessandra Faria)
  * Usa @WebMvcTest para testar apenas o controller isoladamente
  * O repository é mockado com @MockBean
  */
