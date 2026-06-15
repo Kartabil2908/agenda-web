@@ -27,7 +27,7 @@ const api = axios.create({
 
 // ========== CONTATOS (Alessandra Faria) ==========
 export const contatoService = {
-  listar: () => api.get('/contatos'),
+  listar: (nome = '') => api.get(nome ? `/contatos?nome=${nome}` : '/contatos'),
   buscar: (id) => api.get(`/contatos/${id}`),
   criar: (contato) => api.post('/contatos', contato),
   atualizar: (id, contato) => api.put(`/contatos/${id}`, contato),
