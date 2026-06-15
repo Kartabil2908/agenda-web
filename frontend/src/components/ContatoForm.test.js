@@ -22,6 +22,7 @@ test('renderiza corretamente o formulário de criação de contato (Alessandra)'
   // Verifica se o título da tela aparece
   expect(screen.getByText('Novo Contato')).toBeInTheDocument();
   
+  
   // Verifica se o campo de Nome (obrigatório) está presente
   expect(screen.getByLabelText(/Nome \*/i)).toBeInTheDocument();
   
