@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Web - Java + React + GitHub Actions + Render</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #243042;
+            background: #f5f7fb;
+        }
+        .container { max-width: 1180px; margin: 0 auto; padding: 24px; }
+        h1 {
+            text-align: center;
+            color: #fff;
+            font-size: 2.15rem;
+            margin: 24px 0;
+            padding: 28px 20px;
+            background: linear-gradient(135deg, #2563eb, #14b8a6);
+            border-radius: 12px;
+        }
+        h1 small { display: block; font-size: 0.52em; margin-top: 8px; opacity: 0.94; }
+        h2 {
+            color: #1d4ed8;
+            border-bottom: 3px solid #1d4ed8;
+            padding-bottom: 10px;
+            margin: 38px 0 18px;
+            font-size: 1.55rem;
+        }
+        h3 { color: #182235; margin: 22px 0 12px; font-size: 1.22rem; }
+        h4 { color: #334155; margin: 18px 0 10px; }
+        p, li { font-size: 1rem; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0 22px; background: #fff; }
+        th, td { border: 1px solid #d8e0ee; padding: 11px 12px; text-align: left; vertical-align: top; }
+        th { background: #e8f0ff; color: #1e3a8a; }
+        code { background: #eef2ff; padding: 2px 6px; border-radius: 4px; }
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 22px 0;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+        }
+        .toc a { color: #1d4ed8; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+            margin: 16px 0;
+        }
+        .member {
+            border-left: 5px solid #1d4ed8;
+            background: #f8fbff;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        .member.gabriela { border-left-color: #16a34a; }
+        .member.bernardo { border-left-color: #f97316; }
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            background: #1d4ed8;
+        }
+        .tag.gabriela { background: #16a34a; }
+        .tag.bernardo { background: #f97316; }
+        .phase {
+            display: inline-block;
+            color: #fff;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin: 4px 4px 8px 0;
+        }
+        .phase-local { background: #64748b; }
+        .phase-git { background: #0f172a; }
+        .phase-ci { background: #2563eb; }
+        .phase-render { background: #14b8a6; }
+        .phase-test { background: #9333ea; }
+        .info-box, .warning-box {
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin: 14px 0;
+        }
+        .info-box { background: #e0f2fe; border-left: 5px solid #0284c7; }
+        .warning-box { background: #fff7ed; border-left: 5px solid #f97316; }
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 0.92rem;
+            line-height: 1.45;
+            margin: 12px 0 18px;
+            white-space: pre;
+        }
+        .code-block .comment { color: #94a3b8; }
+        .code-block .keyword { color: #93c5fd; }
+        .code-block .string { color: #fde68a; }
+        .diagram-container {
+            background: #fff;
+            border: 1px solid #d8e0ee;
+            border-radius: 8px;
+            padding: 18px;
+            margin: 14px 0 22px;
+            overflow-x: auto;
+        }
+        .step-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            color: #fff;
+            background: #1d4ed8;
+            border-radius: 50%;
+            margin-right: 8px;
+            font-weight: 700;
+        }
+        @media print {
+            body { background: #fff; }
+            .section { break-inside: avoid; box-shadow: none; border: 1px solid #d8e0ee; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h1>Agenda Web<small>Java Spring Boot + React | GitHub Actions | Docker | Render | Grupo com 3 integrantes</small></h1>
+
+<div class="section toc">
+<h2>Sumário</h2>
+<ul>
+<li><a href="#visao-geral">1. Visão Geral e Atendimento às Instruções</a></li>
+<li><a href="#equipe">2. Equipe e Divisão de Funções</a></li>
+<li><a href="#ferramentas">3. Ferramentas Utilizadas</a></li>
+<li><a href="#arquitetura">4. Arquitetura do Sistema</a></li>
+<li><a href="#banco">5. Modelo de Dados</a></li>
+<li><a href="#git">6. Git, Branches e Code Review</a></li>
+<li><a href="#estrutura">7. Estrutura do Projeto</a></li>
+<li><a href="#backend">8. Backend Spring Boot</a></li>
+<li><a href="#frontend">9. Frontend React</a></li>
+<li><a href="#testes">10. Testes Automatizados</a></li>
+<li><a href="#cicd">11. CI/CD com GitHub Actions</a></li>
+<li><a href="#render">12. Infraestrutura e Deploy no Render</a></li>
+<li><a href="#resumo-final">13. Resumo Final</a></li>
+</ul>
+</div>
+
+<div class="section" id="visao-geral">
+<h2>1. Visão Geral e Atendimento às Instruções</h2>
+<p>O trabalho implementa uma Agenda Web full-stack com cadastro de contatos e compromissos, persistência em PostgreSQL, testes automatizados, containerização e deploy em nuvem.</p>
+
+<table>
+<tr><th>Instrução do trabalho</th><th>Como foi atendida</th></tr>
+<tr><td>Aplicação web completa</td><td>Backend REST em Spring Boot e frontend em React.</td></tr>
+<tr><td>CRUD e persistência</td><td>CRUD de Contatos e Compromissos usando Spring Data JPA e PostgreSQL.</td></tr>
+<tr><td>Versionamento e colaboração</td><td>Git, GitHub, branches por responsabilidade e revisão por Pull Request.</td></tr>
+<tr><td>Testes</td><td>Testes unitários de controllers, integração com PostgreSQL via Testcontainers e testes React com Jest.</td></tr>
+<tr><td>CI/CD</td><td>GitHub Actions executa testes, build e aceitação antes da publicação.</td></tr>
+<tr><td>Deploy</td><td>Render Blueprint com PostgreSQL, backend Docker e frontend static site.</td></tr>
+</table>
+
+<div class="info-box"><strong>Correção de inconsistência:</strong> a entrega atual usa Render de forma consistente no código, na apresentação, no pipeline e na documentação.</div>
+</div>
+
+<div class="section" id="equipe">
+<h2>2. Equipe e Divisão de Funções</h2>
+<div class="team-grid">
+<div class="member">
+<span class="tag">Alessandra Faria</span>
+<p><strong>Responsabilidade:</strong> módulo de Contatos.</p>
+<ul>
+<li>Model <code>Contato</code>, repository e controller REST.</li>
+<li>Telas React <code>ContatoList</code> e <code>ContatoForm</code>.</li>
+<li>Validação do campo obrigatório <code>nome</code>.</li>
+<li>Testes unitários de <code>ContatoController</code>.</li>
+</ul>
+</div>
+<div class="member gabriela">
+<span class="tag gabriela">Gabriela Reis</span>
+<p><strong>Responsabilidade:</strong> módulo de Compromissos.</p>
+<ul>
+<li>Model <code>Compromisso</code>, repository e controller REST.</li>
+<li>Telas React <code>CompromissoList</code> e <code>CompromissoForm</code>.</li>
+<li>Vínculo de compromisso com contato existente.</li>
+<li>Testes unitários e cenários de erro do vínculo.</li>
+</ul>
+</div>
+<div class="member bernardo">
+<span class="tag bernardo">Bernardo Kartabil</span>
+<p><strong>Responsabilidade:</strong> infraestrutura, CI/CD e Render.</p>
+<ul>
+<li>Dockerfiles de backend e frontend.</li>
+<li>Ambiente local com Docker Compose.</li>
+<li>Pipeline GitHub Actions na branch <code>deploy</code>.</li>
+<li>Render Blueprint, health check, PostgreSQL e documentação de deploy.</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="section" id="ferramentas">
+<h2>3. Ferramentas Utilizadas</h2>
+<table>
+<tr><th>Área</th><th>Ferramenta</th><th>Uso no projeto</th></tr>
+<tr><td>Backend</td><td>Java 17 + Spring Boot 3.2</td><td>API REST, validação, JPA e documentação Swagger.</td></tr>
+<tr><td>Frontend</td><td>React 18 + React Router</td><td>Interface para listar, criar, editar e excluir dados.</td></tr>
+<tr><td>Banco</td><td>PostgreSQL 15</td><td>Persistência relacional em desenvolvimento, teste e produção.</td></tr>
+<tr><td>Build</td><td>Maven + npm</td><td>Compilação, testes e empacotamento.</td></tr>
+<tr><td>Testes</td><td>JUnit 5, Mockito, Testcontainers, Jest</td><td>Cobertura unitária, integração real e validação básica da UI.</td></tr>
+<tr><td>Containers</td><td>Docker + Docker Compose</td><td>Execução local e teste de aceitação end-to-end.</td></tr>
+<tr><td>CI/CD</td><td>GitHub Actions + Render</td><td>Checks automáticos e deploy após aprovação dos checks.</td></tr>
+</table>
+</div>
+
+<div class="section" id="arquitetura">
+<h2>4. Arquitetura do Sistema</h2>
+<div class="diagram-container">
+<pre class="mermaid">
+graph TB
+    User["Usuário no navegador"] --> FE["React 18<br/>Frontend"]
+    FE --> API["Spring Boot 3.2<br/>API REST"]
+    API --> JPA["Spring Data JPA<br/>Repositories"]
+    JPA --> DB[("PostgreSQL 15")]
+
+    subgraph "Módulos funcionais"
+        C["Contatos<br/>Alessandra Faria"]
+        A["Compromissos<br/>Gabriela Reis"]
+    end
+
+    subgraph "Infraestrutura"
+        D["Docker / Compose"]
+        GHA["GitHub Actions"]
+        R["Render<br/>Bernardo Kartabil"]
+    end
+
+    C --> API
+    A --> API
+    GHA --> D
+    GHA --> R
+    R --> FE
+    R --> API
+    R --> DB
+</pre>
+</div>
+
+<h3>Fluxo de uma requisição</h3>
+<ol>
+<li>O usuário acessa o frontend publicado como Static Site no Render.</li>
+<li>O React chama a API pelo serviço <code>api.js</code>.</li>
+<li>O backend processa a requisição nos controllers REST.</li>
+<li>Os repositories acessam o PostgreSQL via JPA/Hibernate.</li>
+<li>A resposta JSON volta para o React atualizar a tela.</li>
+</ol>
+</div>
+
+<div class="section" id="banco">
+<h2>5. Modelo de Dados</h2>
+<div class="diagram-container">
+<pre class="mermaid">
+erDiagram
+    CONTATOS ||--o{ COMPROMISSOS : possui
+
+    CONTATOS {
+        bigint id PK
+        varchar nome
+        varchar telefone
+        varchar email
+        varchar endereco
+        timestamp criado_em
+    }
+
+    COMPROMISSOS {
+        bigint id PK
+        varchar titulo
+        date data
+        time hora
+        text descricao
+        bigint contato_id FK
+        timestamp criado_em
+    }
+</pre>
+</div>
+<p>O relacionamento é opcional: um compromisso pode ser criado sem contato, mas quando um <code>contato.id</code> é informado o backend valida se esse contato realmente existe.</p>
+</div>
+
+<div class="section" id="git">
+<h2>6. Git, Branches e Code Review</h2>
+<span class="phase phase-git">GIT + GITHUB</span>
+<h3>Branches por responsabilidade</h3>
+<div class="code-block"><span class="comment"># Alessandra Faria</span>
+git checkout -b feature/contatos
+git add backend frontend
+git commit -m "feat: implementar CRUD de contatos"
+git push origin feature/contatos
+
+<span class="comment"># Gabriela Reis</span>
+git checkout -b feature/compromissos
+git add backend frontend
+git commit -m "feat: implementar CRUD de compromissos"
+git push origin feature/compromissos
+
+<span class="comment"># Bernardo Kartabil</span>
+git checkout -b feature/infra-render
+git add .github docker-compose.yml render.yaml backend/Dockerfile frontend/Dockerfile
+git commit -m "ci: configurar pipeline e deploy no Render"
+git push origin feature/infra-render</div>
+
+<div class="diagram-container">
+<pre class="mermaid">
+sequenceDiagram
+    participant A as Alessandra
+    participant G as Gabriela
+    participant B as Bernardo
+    participant GH as GitHub
+    participant CI as GitHub Actions
+    participant R as Render
+
+    A->>GH: Pull Request feature/contatos
+    G->>GH: Pull Request feature/compromissos
+    B->>GH: Pull Request feature/infra-render
+    GH->>CI: Executa testes e builds
+    CI-->>GH: Checks aprovados
+    GH->>GH: Merge na branch deploy
+    CI->>CI: Acceptance tests com Docker Compose
+    R->>R: Deploy automático após checks passarem
+</pre>
+</div>
+</div>
+
+<div class="section" id="estrutura">
+<h2>7. Estrutura do Projeto</h2>
+<div class="code-block">agenda-web/
+├── .github/workflows/ci-cd.yml
+├── backend/
+│   ├── Dockerfile
+│   ├── pom.xml
+│   └── src/
+│       ├── main/java/com/agenda/
+│       │   ├── controller/
+│       │   ├── model/
+│       │   └── repository/
+│       └── test/java/com/agenda/
+├── frontend/
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   ├── package.json
+│   └── src/
+│       ├── components/
+│       ├── services/api.js
+│       └── App.test.js
+├── docker-compose.yml
+├── render.yaml
+└── apresentacao_completa.html</div>
+</div>
+
+<div class="section" id="backend">
+<h2>8. Backend Spring Boot</h2>
+<h3><span class="tag">Alessandra</span> Contatos</h3>
+<div class="code-block"><span class="comment">// ContatoController.java</span>
+@RestController
+@RequestMapping("/api/contatos")
+public class ContatoController {
+    @PostMapping
+    public ResponseEntity&lt;Contato&gt; criar(@Valid @RequestBody Contato contato) { ... }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;Contato&gt;&gt; listar() { ... }
+
+    @PutMapping("/{id}")
+    public ResponseEntity&lt;?&gt; atualizar(@PathVariable Long id, @Valid @RequestBody Contato dados) { ... }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity&lt;?&gt; deletar(@PathVariable Long id) { ... }
+}</div>
+
+<h3><span class="tag gabriela">Gabriela</span> Compromissos</h3>
+<div class="code-block"><span class="comment">// Regra corrigida: não salvar contato inexistente</span>
+private boolean resolverContato(Compromisso compromisso) {
+    if (compromisso.getContato() == null) return true;
+    Long contatoId = compromisso.getContato().getId();
+    if (contatoId == null) {
+        compromisso.setContato(null);
+        return true;
+    }
+    Optional&lt;Contato&gt; contato = contatoRepository.findById(contatoId);
+    contato.ifPresent(compromisso::setContato);
+    return contato.isPresent();
+}</div>
+
+<div class="info-box"><strong>Resultado:</strong> o endpoint de compromissos retorna <code>404</code> quando recebe um contato vinculado que não existe, evitando inconsistência referencial.</div>
+</div>
+
+<div class="section" id="frontend">
+<h2>9. Frontend React</h2>
+<p>O frontend possui rotas para contatos e compromissos, formulários reutilizados para criação/edição e serviços Axios centralizados.</p>
+
+<table>
+<tr><th>Componente</th><th>Responsável</th><th>Função</th></tr>
+<tr><td><code>ContatoList.js</code></td><td>Alessandra</td><td>Lista contatos e oferece ações de editar/excluir.</td></tr>
+<tr><td><code>ContatoForm.js</code></td><td>Alessandra</td><td>Cria e atualiza contatos.</td></tr>
+<tr><td><code>CompromissoList.js</code></td><td>Gabriela</td><td>Lista compromissos, data, hora e contato vinculado.</td></tr>
+<tr><td><code>CompromissoForm.js</code></td><td>Gabriela</td><td>Cria e atualiza compromissos, carregando contatos disponíveis.</td></tr>
+<tr><td><code>services/api.js</code></td><td>Bernardo</td><td>Normaliza a URL do backend local ou Render.</td></tr>
+</table>
+
+<div class="code-block"><span class="comment">// api.js normaliza localhost, URL completa ou host injetado pelo Render</span>
+function resolveApiUrl() {
+  const raw = process.env.REACT_APP_API_URL;
+  if (!raw) return 'http://localhost:8080/api';
+  let url = raw.trim();
+  if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+  url = url.replace(/\/+$/, '');
+  if (!/\/api$/i.test(url)) url = `${url}/api`;
+  return url;
+}</div>
+</div>
+
+<div class="section" id="testes">
+<h2>10. Testes Automatizados</h2>
+<span class="phase phase-test">TESTES</span>
+<table>
+<tr><th>Tipo</th><th>Ferramenta</th><th>O que valida</th></tr>
+<tr><td>Unitário backend</td><td>JUnit 5 + Mockito + MockMvc</td><td>Controllers isolados, status HTTP e payload JSON.</td></tr>
+<tr><td>Integração backend</td><td>Spring Boot + Testcontainers</td><td>Fluxo real controller → repository → PostgreSQL.</td></tr>
+<tr><td>Frontend</td><td>Jest + React DOM</td><td>Renderização inicial, navegação e chamadas aos services.</td></tr>
+<tr><td>Aceitação</td><td>Docker Compose + curl</td><td>Backend e frontend respondendo juntos antes do deploy.</td></tr>
+</table>
+
+<div class="diagram-container">
+<pre class="mermaid">
+graph LR
+    A["Commit / Pull Request"] --> B["Testes unitários"]
+    B --> C["Testes integração<br/>PostgreSQL Testcontainers"]
+    C --> D["Build React"]
+    D --> E["Docker Compose"]
+    E --> F["curl /api/contatos<br/>curl frontend"]
+    F --> G["Checks aprovados"]
+</pre>
+</div>
+</div>
+
+<div class="section" id="cicd">
+<h2>11. CI/CD com GitHub Actions</h2>
+<span class="phase phase-ci">CI/CD</span>
+<p>O pipeline roda em push e Pull Request para a branch <code>deploy</code>. O papel do GitHub Actions é validar a entrega; o Render executa o deploy após os checks passarem.</p>
+
+<div class="code-block"><span class="keyword">name:</span> CI/CD Pipeline - Agenda Web (Java + React + Render)
+
+<span class="keyword">on:</span>
+  push:
+    branches: [ deploy ]
+  pull_request:
+    branches: [ deploy ]
+
+<span class="keyword">jobs:</span>
+  test-backend:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+      - run: mvn test -Dtest="*ControllerTest" -B
+      - run: mvn test -Dtest="IntegracaoTest" -B
+      - run: mvn verify -B
+
+  test-frontend:
+    steps:
+      - uses: actions/setup-node@v4
+      - run: npm ci
+      - run: npm test -- --coverage --watchAll=false
+      - run: npm run build
+
+  acceptance:
+    needs: [test-backend, test-frontend]
+    steps:
+      - run: docker compose build
+      - run: docker compose up -d
+      - run: curl -f http://localhost:8080/api/contatos
+      - run: curl -f http://localhost:3000</div>
+</div>
+
+<div class="section" id="render">
+<h2>12. Infraestrutura e Deploy no Render</h2>
+<span class="phase phase-render">RENDER</span>
+<h3><span class="tag bernardo">Bernardo Kartabil</span> Infra, CI/CD e Render</h3>
+<p>O deploy usa o arquivo <code>render.yaml</code> como infraestrutura como código. Ele define banco, backend e frontend no mesmo blueprint.</p>
+
+<div class="diagram-container">
+<pre class="mermaid">
+graph TB
+    GH["GitHub<br/>branch deploy"] --> GHA["GitHub Actions<br/>checks"]
+    GHA -->|checksPass| R["Render Blueprint"]
+
+    subgraph "Render"
+        DB[("agenda-db<br/>PostgreSQL")]
+        BE["agenda-backend<br/>Web Service Docker"]
+        FE["agenda-frontend<br/>Static Site"]
+    end
+
+    FE -->|HTTPS /api| BE
+    BE -->|JDBC| DB
+</pre>
+</div>
+
+<h3>Blueprint Render</h3>
+<div class="code-block"><span class="keyword">databases:</span>
+  - name: agenda-db
+    databaseName: agenda_db
+    user: agenda
+    plan: free
+    region: oregon
+
+<span class="keyword">services:</span>
+  - type: web
+    name: agenda-backend
+    runtime: docker
+    branch: deploy
+    autoDeployTrigger: checksPass
+    rootDir: backend
+    healthCheckPath: /api/contatos
+
+  - type: web
+    name: agenda-frontend
+    runtime: static
+    branch: deploy
+    autoDeployTrigger: checksPass
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: build</div>
+
+<h3>Responsabilidades de infraestrutura</h3>
+<ul>
+<li><strong>Dockerfile backend:</strong> build multi-stage com Maven e runtime Java 17.</li>
+<li><strong>Dockerfile frontend:</strong> build React e publicação em Nginx para execução local containerizada.</li>
+<li><strong>Docker Compose:</strong> ambiente completo com PostgreSQL, backend e frontend.</li>
+<li><strong>GitHub Actions:</strong> validação automática antes do deploy.</li>
+<li><strong>Render:</strong> banco PostgreSQL gerenciado, backend Docker e frontend static site.</li>
+</ul>
+</div>
+
+<div class="section" id="resumo-final">
+<h2>13. Resumo Final</h2>
+<div class="diagram-container">
+<pre class="mermaid">
+graph LR
+    A["Alessandra<br/>Contatos"] --> APP["Agenda Web"]
+    G["Gabriela<br/>Compromissos"] --> APP
+    B["Bernardo<br/>Infra + CI/CD + Render"] --> APP
+
+    APP --> T["Testes automatizados"]
+    T --> C["Docker Compose<br/>aceitação"]
+    C --> R["Render<br/>produção"]
+</pre>
+</div>
+
+<table>
+<tr><th>Entrega</th><th>Status</th></tr>
+<tr><td>CRUD Contatos</td><td>Implementado e testado.</td></tr>
+<tr><td>CRUD Compromissos</td><td>Implementado, testado e corrigido para validar contato existente.</td></tr>
+<tr><td>Frontend React</td><td>Rotas, listas, formulários e testes básicos.</td></tr>
+<tr><td>CI/CD</td><td>GitHub Actions na branch <code>deploy</code>.</td></tr>
+<tr><td>Deploy</td><td>Render com <code>autoDeployTrigger: checksPass</code>.</td></tr>
+<tr><td>Documentação</td><td>README e apresentação atualizados para grupo de 3.</td></tr>
+</table>
+
+<h3>Comandos principais</h3>
+<table>
+<tr><th>Comando</th><th>Uso</th></tr>
+<tr><td><code>docker compose up -d</code></td><td>Sobe o ambiente local completo.</td></tr>
+<tr><td><code>mvn test</code></td><td>Executa os testes do backend.</td></tr>
+<tr><td><code>npm test -- --coverage --watchAll=false</code></td><td>Executa os testes do frontend.</td></tr>
+<tr><td><code>npm run build</code></td><td>Gera build de produção do frontend.</td></tr>
+<tr><td><code>docker compose down -v</code></td><td>Remove containers e volume local de teste.</td></tr>
+</table>
+</div>
+
+</div>
+<script>
+    mermaid.initialize({ startOnLoad: true, theme: "default" });
+</script>
+</body>
+</html>
