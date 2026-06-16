@@ -31,12 +31,11 @@ public class CompromissoController {
         if (!resolverContato(compromisso)) {
             return ResponseEntity.notFound().build();
         }
-
         Compromisso salvo = repository.save(compromisso);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
-    // READ - Listar todos os compromissos
+    // READ - Listar todos os compromissos ordenados por data e hora
     @GetMapping
     public ResponseEntity<List<Compromisso>> listar() {
         List<Compromisso> compromissos = repository.findAllByOrderByDataAscHoraAsc();
@@ -48,11 +47,10 @@ public class CompromissoController {
     public ResponseEntity<?> buscar(@PathVariable Long id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(null));
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
-    // UPDATE - Atualizar compromisso
+    // UPDATE - Atualizar compromisso existente
     @PutMapping("/{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id,
                                        @Valid @RequestBody Compromisso dados) {
@@ -84,17 +82,16 @@ public class CompromissoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Resolve o contato vinculado: valida se existe no banco antes de salvar
     private boolean resolverContato(Compromisso compromisso) {
         if (compromisso.getContato() == null) {
-            return true;
+            return true; // sem vínculo é permitido
         }
-
         Long contatoId = compromisso.getContato().getId();
         if (contatoId == null) {
             compromisso.setContato(null);
             return true;
         }
-
         Optional<com.agenda.model.Contato> contato = contatoRepository.findById(contatoId);
         contato.ifPresent(compromisso::setContato);
         return contato.isPresent();

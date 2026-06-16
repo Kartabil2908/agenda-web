@@ -26,8 +26,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * TESTES UNITÁRIOS - Compromissos (Gabriela Reis)
- * Usa @WebMvcTest para testar apenas o controller isoladamente
+ * TESTES UNITÁRIOS - CompromissoController
+ *
+ * @WebMvcTest sobe apenas a camada web (sem banco).
+ * @MockBean substitui os repositórios por versões falsas (Mockito).
+ * MockMvc simula chamadas HTTP sem precisar de servidor rodando.
  */
 @WebMvcTest(CompromissoController.class)
 class CompromissoControllerTest {
@@ -111,5 +114,41 @@ class CompromissoControllerTest {
 
         mockMvc.perform(get("/api/compromissos/999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveAtualizarCompromissoExistente() throws Exception {
+        Compromisso existente = new Compromisso();
+        existente.setId(1L);
+        existente.setTitulo("Título antigo");
+        existente.setData(LocalDate.of(2024, 12, 15));
+
+        Compromisso atualizado = new Compromisso();
+        atualizado.setId(1L);
+        atualizado.setTitulo("Título novo");
+        atualizado.setData(LocalDate.of(2024, 12, 20));
+
+        when(repository.findById(1L)).thenReturn(Optional.of(existente));
+        when(repository.save(any(Compromisso.class))).thenReturn(atualizado);
+
+        mockMvc.perform(put("/api/compromissos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(atualizado)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.titulo").value("Título novo"));
+    }
+
+    @Test
+    void deveDeletarCompromissoExistente() throws Exception {
+        Compromisso comp = new Compromisso();
+        comp.setId(1L);
+        comp.setTitulo("Compromisso a deletar");
+        comp.setData(LocalDate.of(2024, 12, 15));
+
+        when(repository.findById(1L)).thenReturn(Optional.of(comp));
+
+        mockMvc.perform(delete("/api/compromissos/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.mensagem").value("Compromisso removido com sucesso"));
     }
 }

@@ -5,15 +5,14 @@ import { contatoService } from '../services/api';
 function ContatoList() {
   const [contatos, setContatos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [busca, setBusca] = useState(''); // Estado da barra de pesquisa
 
   useEffect(() => {
     carregarContatos();
-  }, [busca]); // Recarrega os contatos toda vez que a busca mudar
+  }, []);
 
   const carregarContatos = async () => {
     try {
-      const response = await contatoService.listar(busca);
+      const response = await contatoService.listar();
       setContatos(response.data);
     } catch (error) {
       console.error('Erro ao carregar contatos:', error);
@@ -39,16 +38,7 @@ function ContatoList() {
     <div>
       <div className="header">
         <h2>📋 Contatos</h2>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <input
-            type="text"
-            placeholder="Buscar por nome..."
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-            style={{ padding: '8px', borderRadius: '8px', border: '1px solid #d6d9e6' }}
-          />
-          <Link to="/contatos/novo" className="btn btn-primary">+ Novo Contato</Link>
-        </div>
+        <Link to="/contatos/novo" className="btn btn-primary">+ Novo Contato</Link>
       </div>
 
       <table className="table">
@@ -77,7 +67,7 @@ function ContatoList() {
         </tbody>
       </table>
 
-      {contatos.length === 0 && <p className="empty">Nenhum contato encontrado.</p>}
+      {contatos.length === 0 && <p className="empty">Nenhum contato cadastrado.</p>}
     </div>
   );
 }

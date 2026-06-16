@@ -27,15 +27,10 @@ public class ContatoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
-    // READ - Listar todos os contatos (com filtro opcional por nome)
+    // READ - Listar todos os contatos
     @GetMapping
-    public ResponseEntity<List<Contato>> listar(@RequestParam(required = false) String nome) {
-        List<Contato> contatos;
-        if (nome != null && !nome.trim().isEmpty()) {
-            contatos = repository.findByNomeContainingIgnoreCase(nome);
-        } else {
-            contatos = repository.findAllByOrderByNomeAsc();
-        }
+    public ResponseEntity<List<Contato>> listar() {
+        List<Contato> contatos = repository.findAllByOrderByNomeAsc();
         return ResponseEntity.ok(contatos);
     }
 
