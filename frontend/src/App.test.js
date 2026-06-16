@@ -1,8 +1,9 @@
-import React from 'react';
-import { act } from 'react-dom/test-utils';
+import React, { act } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { contatoService, compromissoService } from './services/api';
+
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
 
 jest.mock('./services/api', () => ({
   contatoService: {
@@ -74,5 +75,5 @@ test('navega para compromissos e carrega a lista', async () => {
 
   expect(compromissoService.listar).toHaveBeenCalledTimes(1);
   expect(container.textContent).toContain('Novo Compromisso');
-  expect(container.textContent).toContain('Nenhum compromisso cadastrado.');
+  expect(container.textContent).toContain('Nenhum compromisso cadastrado ainda.');
 });
